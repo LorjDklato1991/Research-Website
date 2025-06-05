@@ -1,4 +1,5 @@
 
+!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Warm Neutrals with Subtle Blue Accents (#F8F5F2, #434242, #2F4F4F, #5C6E7E, #EAE3DC) -->
-    <!-- Application Structure Plan: A single-page application with a sticky top navigation bar. Sections include Introduction (with interactive research process), Conceptualization (with AI question refinement), Literature Review (with AI article summarization), Methods (with a comparative chart and new quantitative/qualitative flowcharts), Data & Analysis (with interactive pitfalls), Ethics (with a checklist), and an expanded Writing section. The Writing section now includes a more detailed breakdown of thesis parts, a Citation Style Quick Reference (tabs), AI-powered Grammar/Style Checker, AI Citation Formatter, and the Abstract Draft Generator. This version also includes a mini-guide on using Mendeley and Zotero for citation management. This structure maintains a logical flow through the research process while providing dynamic, AI-assisted tools and visual aids for students. -->
+    <!-- Application Structure Plan: A single-page application with a sticky top navigation bar. Sections include Introduction (with interactive research process and image), Conceptualization (with AI question refinement), Literature Review (with AI article summarization), Methods (with a comparative chart, new quantitative/qualitative flowcharts, updated design/sampling details, and new interactive method choice guide with images), Data & Analysis (with interactive pitfalls), Ethics (with a checklist), and an expanded Writing section (with thesis parts, citation manager guide, and AI tools, plus images). This structure maintains a logical flow through the research process while providing dynamic, AI-assisted tools and visual aids for students. -->
     <!-- Visualization & Content Choices: 
         - Report Info: The linear research process. Goal: Organize/Inform. Viz/Method: Interactive flowchart using HTML/CSS/JS. Interaction: Clicking a stage reveals a summary. Justification: Visualizes the research journey, making it more intuitive than a list. Library/Method: Vanilla JS.
         - Report Info: Comparison of research approaches. Goal: Compare. Viz/Method: Chart.js Radar Chart. Interaction: Tooltips on hover provide details. Justification: Offers a quick, high-impact visual comparison of complex characteristics. Library/Method: Chart.js.
@@ -26,6 +27,7 @@
         - Report Info: Citation Formatting. Goal: Assist/Format. Viz/Method: Input fields for citation components, dropdown for style, button, and output area. Interaction: User inputs details, selects style, clicks button, AI generates formatted citation. Justification: Simplifies complex citation rules. Library/Method: Gemini API (gemini-2.0-flash).
         - Report Info: Parts of a Research Paper/Thesis. Goal: Inform/Organize. Viz/Method: Detailed text descriptions with examples. Interaction: Static text. Justification: Provides comprehensive guidance on academic writing structure. Library/Method: HTML/CSS.
         - Report Info: Mendeley/Zotero Guide. Goal: Inform/Educate. Viz/Method: Step-by-step text guide. Interaction: Static text. Justification: Provides practical guidance on using popular citation management tools. Library/Method: HTML/CSS.
+        - Report Info: Method/Sampling Choice Guide. Goal: Educate/Guide. Viz/Method: Interactive expanding cards with criteria and explanations. Interaction: Clicking a card reveals details. Justification: Offers a structured, interactive way for students to learn decision factors. Library/Method: Vanilla JS.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -241,6 +243,40 @@
             height: 2px;
             background-color: #EAE3DC;
         }
+
+        /* Styling for the Method/Sampling Choice Guide Cards */
+        .choice-card-container {
+            border: 1px solid #EAE3DC;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 1rem;
+        }
+        .choice-card-header {
+            background-color: #5C6E7E;
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        .choice-card-content {
+            padding: 1rem;
+            color: #434242;
+            display: none; /* Hidden by default */
+        }
+        .choice-card-container.expanded .choice-card-content {
+            display: block;
+        }
+        .choice-card-container.expanded .choice-card-header svg {
+            transform: rotate(180deg);
+        }
+        .choice-card-header svg {
+            transition: transform 0.3s ease;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -282,11 +318,15 @@
         <!-- Introduction Section -->
         <section id="introduction" class="mb-24 scroll-mt-24">
             <h1 class="text-4xl md:text-5xl font-bold text-center mb-6">Your Interactive Guide to Criminological Research</h1>
-            <p class="text-lg text-center max-w-3xl mx-auto mb-12 text-[#434242]">This guide translates the comprehensive Criminology Research Manual into a practical, interactive experience. Navigate the research process, explore methodologies, and master the essentials of ethical and effective inquiry. This tool is designed to support you at every stage of your research journey, from crafting your initial question to presenting your final paper.</p>
+            <p class="text-lg text-center max-w-3xl mx-auto mb-8 text-[#434242]">This guide translates the comprehensive Criminology Research Manual into a practical, interactive experience. Navigate the research process, explore methodologies, and master the essentials of ethical and effective inquiry. This tool is designed to support you at every stage of your research journey, from crafting your initial question to presenting your final paper.</p>
+            <div class="flex justify-center mb-12">
+                <img src="https://placehold.co/800x400/EAE3DC/434242?text=Welcome+to+Criminology+Research" alt="Researchers collaborating on a project with charts and books." class="rounded-lg shadow-md max-w-full h-auto">
+            </div>
             
             <h2 class="text-3xl font-bold text-center mb-8">The Research Process at a Glance</h2>
             <p class="text-center max-w-2xl mx-auto mb-8 text-[#434242]">The research process is an iterative cycle, not a straight line. Click on each stage below to see a summary of the key steps involved. This visual map helps you understand how each phase connects to the others, allowing you to plan your project effectively.</p>
             <div id="research-process-container" class="flex flex-col md:flex-row justify-center items-center gap-4 flex-wrap">
+                <!-- Research stages will be dynamically inserted here by JavaScript -->
             </div>
             <div id="research-process-details" class="mt-8 p-6 bg-white rounded-lg shadow-md max-w-3xl mx-auto min-h-[100px]" role="region" aria-live="polite" aria-atomic="true">
                 <p class="text-gray-500 italic">Click a stage above to see details here.</p>
@@ -382,6 +422,10 @@
         <section id="methods" class="mb-24 scroll-mt-24">
             <h2 class="text-3xl font-bold text-center mb-4">III. Research Design & Methods</h2>
             <p class="text-center max-w-3xl mx-auto mb-12 text-[#434242]">Your choice of research method is determined by your research question. This section explores the primary approaches in criminology, helping you decide which is the best fit for your study. A sound design ensures the validity and reliability of your findings.</p>
+            <div class="flex justify-center mb-12">
+                <img src="https://placehold.co/800x400/EAE3DC/434242?text=Research+Methods+in+Action" alt="A scientist in a labcoat looking at data on a screen, representing research." class="rounded-lg shadow-md max-w-full h-auto">
+            </div>
+
             <div class="bg-white p-8 rounded-lg shadow-md mb-16">
                 <h3 class="text-2xl font-semibold mb-6 text-center">Comparing Research Approaches</h3>
                 <p class="text-center max-w-2xl mx-auto mb-8 text-[#434242]">Each research approach has distinct strengths. Quantitative methods are excellent for testing hypotheses and identifying broad patterns, while qualitative methods provide deep, contextual understanding. Mixed methods combine both to create a more comprehensive picture. The chart below provides a visual comparison of their core characteristics.</p>
@@ -412,7 +456,7 @@
             </div>
 
             <!-- Qualitative Research Flowchart -->
-            <div class="bg-white p-8 rounded-lg shadow-md">
+            <div class="bg-white p-8 rounded-lg shadow-md mb-16">
                 <h3 class="text-2xl font-semibold mb-6 text-center">Qualitative Research Flow</h3>
                 <p class="text-center max-w-3xl mx-auto mb-8 text-[#434242]">Qualitative research is often iterative and flexible, allowing for themes to emerge. Click on each step to highlight its fluid nature.</p>
                 <div class="flex flex-col items-center justify-center">
@@ -441,6 +485,117 @@
                     <div class="flowchart-step w-64 md:w-80" data-detail="Presents rich narratives and thematic findings to provide contextual insights.">Disseminate Findings</div>
                 </div>
             </div>
+
+            <!-- New: Interactive Guide on Choosing Research & Sampling Methods -->
+            <div class="bg-white p-8 rounded-lg shadow-md mt-16">
+                <h3 class="text-2xl font-semibold mb-6 text-center text-[#2F4F4F]">Choosing Your Research Path: A Decision Guide</h3>
+                <p class="text-center max-w-3xl mx-auto mb-8 text-[#434242]">Selecting the right research design and sampling method is crucial. This interactive guide helps you think through the key considerations for your project. Click on each factor to reveal guiding questions and advice.</p>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Consideration Card 1: Research Question & Objectives -->
+                    <div class="choice-card-container">
+                        <div class="choice-card-header">
+                            What is your Research Question?
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                        <div class="choice-card-content">
+                            <p class="font-semibold mb-2">Guiding Questions:</p>
+                            <ul class="list-disc list-inside mb-4">
+                                <li>Are you trying to measure something or test a hypothesis? (Quantitative)</li>
+                                <li>Are you exploring a phenomenon or understanding experiences? (Qualitative)</li>
+                                <li>Do you need both broad patterns and deep insights? (Mixed Methods)</li>
+                            </ul>
+                            <p class="text-sm italic">Your question dictates the fundamental approach. "How many?" or "Does X affect Y?" points to quantitative. "What are the experiences of...?" or "How does...?" points to qualitative.</p>
+                        </div>
+                    </div>
+
+                    <!-- Consideration Card 2: Desired Outcome -->
+                    <div class="choice-card-container">
+                        <div class="choice-card-header">
+                            What is your Desired Outcome?
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                        <div class="choice-card-content">
+                            <p class="font-semibold mb-2">Guiding Questions:</p>
+                            <ul class="list-disc list-inside mb-4">
+                                <li>Do you need to generalize your findings to a larger population? (Quantitative, Probability Sampling)</li>
+                                <li>Do you need rich, in-depth understanding of a specific context or group? (Qualitative, Non-Probability Sampling)</li>
+                                <li>Are you evaluating a program's effectiveness and understanding its mechanisms? (Mixed Methods)</li>
+                            </ul>
+                            <p class="text-sm italic">Generalizability requires statistical rigor; in-depth understanding requires nuanced exploration.</p>
+                        </div>
+                    </div>
+
+                    <!-- Consideration Card 3: Available Resources -->
+                    <div class="choice-card-container">
+                        <div class="choice-card-header">
+                            What Resources are Available?
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                        <div class="choice-card-content">
+                            <p class="font-semibold mb-2">Guiding Questions:</p>
+                            <ul class="list-disc list-inside mb-4">
+                                <li>What is your budget for data collection (e.g., survey costs, interview stipends)?</li>
+                                <li>How much time do you have for data collection and analysis?</li>
+                                <li>Do you have access to large datasets or specific populations (e.g., criminal records, specific offender groups)?</li>
+                            </ul>
+                            <p class="text-sm italic">Large-scale surveys and experiments are resource-intensive. In-depth interviews are time-consuming per participant but can be done with smaller samples.</p>
+                        </div>
+                    </div>
+
+                    <!-- Consideration Card 4: Ethical Considerations -->
+                    <div class="choice-card-container">
+                        <div class="choice-card-header">
+                            Are there Ethical Considerations?
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                        <div class="choice-card-content">
+                            <p class="font-semibold mb-2">Guiding Questions:</p>
+                            <ul class="list-disc list-inside mb-4">
+                                <li>Does your research involve vulnerable populations (minors, prisoners)?</li>
+                                <li>Are you dealing with sensitive topics (trauma, illegal activities)?</li>
+                                <li>What level of privacy and confidentiality can you guarantee?</li>
+                            </ul>
+                            <p class="text-sm italic">Ethical approval (IRB) is mandatory for human subjects. Sensitive topics may limit direct data collection or necessitate specific sampling methods (e.g., snowball sampling for hard-to-reach populations).</p>
+                        </div>
+                    </div>
+
+                    <!-- Consideration Card 5: Expertise & Skills -->
+                    <div class="choice-card-container">
+                        <div class="choice-card-header">
+                            What is your Expertise & Skills?
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                        <div class="choice-card-content">
+                            <p class="font-semibold mb-2">Guiding Questions:</p>
+                            <ul class="list-disc list-inside mb-4">
+                                <li>Are you proficient in statistical analysis software (SPSS, R)?</li>
+                                <li>Are you skilled in conducting in-depth interviews and qualitative coding (NVivo, MAXQDA)?</li>
+                                <li>Do you have experience with mixed methods data integration?</li>
+                            </ul>
+                            <p class="text-sm italic">Leverage your strengths. If you're strong in statistics, quantitative might be a natural fit. If you prefer in-depth conversations, qualitative is better. You can also seek collaboration or training.</p>
+                        </div>
+                    </div>
+
+                    <!-- Consideration Card 6: Data Availability -->
+                    <div class="choice-card-container">
+                        <div class="choice-card-header">
+                            Is Data Readily Available?
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                        <div class="choice-card-content">
+                            <p class="font-semibold mb-2">Guiding Questions:</p>
+                            <ul class="list-disc list-inside mb-4">
+                                <li>Are there existing official statistics or survey datasets you can use? (Secondary data analysis)</li>
+                                <li>Do you need to collect primary data?</li>
+                                <li>Is your target population accessible for direct interaction (surveys, interviews)?</li>
+                            </ul>
+                            <p class="text-sm italic">Secondary data can save time and resources but may not perfectly fit your research question. Primary data collection allows for tailored data but is more demanding.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
         <!-- Data & Analysis Section -->
@@ -529,6 +684,9 @@
         <section id="writing" class="scroll-mt-24">
             <h2 class="text-3xl font-bold text-center mb-4">VI. Academic Writing & Dissemination</h2>
             <p class="text-center max-w-3xl mx-auto mb-12 text-[#434242]">The final stage of research is communicating your findings. Clear, precise, and ethically responsible writing ensures your work is understood, respected, and contributes meaningfully to the field. Adhering to academic standards is crucial for credibility.</p>
+            <div class="flex justify-center mb-12">
+                <img src="https://placehold.co/800x400/EAE3DC/434242?text=Crafting+Your+Academic+Work" alt="A person writing on a laptop with books and coffee, representing academic writing." class="rounded-lg shadow-md max-w-full h-auto">
+            </div>
             
             <div class="bg-white p-8 rounded-lg shadow-md mb-16">
                 <h3 class="text-2xl font-semibold mb-6 text-center">Structuring Your Research Paper/Thesis</h3>
@@ -865,7 +1023,8 @@ document.addEventListener('DOMContentLoaded', () => {
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.clientHeight;
-            if (pageYOffset >= sectionTop - sectionHeight / 3 && pageYOffset < sectionTop + sectionHeight * 2 / 3) {
+            // Adjust offset to make the active state change smoothly before reaching the very top of the section
+            if (pageYOffset >= sectionTop - window.innerHeight / 3 && pageYOffset < sectionTop + sectionHeight - window.innerHeight / 3) {
                 current = section.getAttribute('id');
             }
         });
@@ -894,6 +1053,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const processContainer = document.getElementById('research-process-container');
     const detailsContainer = document.getElementById('research-process-details');
 
+    // Ensure the container is empty before populating to avoid duplicates if script runs multiple times
+    processContainer.innerHTML = ''; 
+
     researchProcessData.forEach((item, index) => {
         const stageEl = document.createElement('div');
         stageEl.className = 'flex items-center space-x-4 cursor-pointer p-3 rounded-lg hover:bg-subtle-light transition transform duration-200 ease-in-out';
@@ -906,8 +1068,8 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         stageEl.addEventListener('click', () => {
             detailsContainer.innerHTML = `<h4 class="font-bold text-lg mb-2 text-[#2F4F4F]">${item.stage}</h4><p class="text-[#434242]">${item.details}</p>`;
-            // Optionally update aria-expanded for the clicked stage, and collapse others if needed.
-            document.querySelectorAll('#research-process-container [aria-expanded="true"]').forEach(el => el.setAttribute('aria-expanded', 'false'));
+            // Remove aria-expanded from all and set for clicked one
+            document.querySelectorAll('#research-process-container [role="button"]').forEach(el => el.setAttribute('aria-expanded', 'false'));
             stageEl.setAttribute('aria-expanded', 'true');
         });
         processContainer.appendChild(stageEl);
@@ -975,9 +1137,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.flowchart-step').forEach(step => {
         step.addEventListener('click', () => {
             // Remove active from all steps first
-            document.querySelectorAll('.flowchart-step').forEach(s => s.classList.remove('border-2', 'border-blue-500', 'font-bold'));
+            document.querySelectorAll('.flowchart-step').forEach(s => s.classList.remove('border-blue-500', 'font-bold'));
             // Add active to clicked step
-            step.classList.add('border-2', 'border-blue-500', 'font-bold');
+            step.classList.add('border-blue-500', 'font-bold');
         });
     });
 
@@ -985,9 +1147,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.qual-flow-step').forEach(step => {
         step.addEventListener('click', () => {
             // Remove active from all steps first
-            document.querySelectorAll('.qual-flow-step').forEach(s => s.classList.remove('border-2', 'border-blue-500', 'font-bold'));
+            document.querySelectorAll('.qual-flow-step').forEach(s => s.classList.remove('border-blue-500', 'font-bold'));
             // Add active to clicked step
-            step.classList.add('border-2', 'border-blue-500', 'font-bold');
+            step.classList.add('border-blue-500', 'font-bold');
+        });
+    });
+
+    // Interactive Method/Sampling Choice Guide
+    document.querySelectorAll('.choice-card-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const parentContainer = header.closest('.choice-card-container');
+            parentContainer.classList.toggle('expanded');
         });
     });
 
@@ -1044,6 +1214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const checklistContainer = document.getElementById('consent-checklist');
+    checklistContainer.innerHTML = ''; // Clear previous content
     consentItems.forEach((item, index) => {
         const label = document.createElement('label');
         label.className = 'flex items-center space-x-3 p-2 rounded-md hover:bg-subtle-light cursor-pointer transition duration-150 ease-in-out';
@@ -1203,7 +1374,7 @@ document.addEventListener('DOMContentLoaded', () => {
             callGeminiAPI(prompt, grammarOutput, checkGrammarSpinner, checkGrammarText, checkGrammarBtn);
         } else {
             grammarOutput.innerHTML = '<p class="text-red-500">Please paste some text to check grammar and style.</p>';
-        }const apiKey =
+        }
     });
 
     // AI Citation Formatter Feature
